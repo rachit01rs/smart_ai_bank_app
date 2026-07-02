@@ -14,48 +14,43 @@ oc new-project devesh-smart-ai-bank
 <img width="2260" height="1234" alt="Screenshot 2026-07-02 at 1 00 10 PM" src="https://github.com/user-attachments/assets/cb23b070-e207-40be-a6dc-24c817546f0e" />
 
 
-## Part 2 — Provision Database - PostgreSQL
+## Part 2 — Provision Database
 
-Create a Secret holding the database configuration (the backend reads these
-exact keys as environment variables):
+In the web console, deploy PostgreSQL using Software Catalog.
 
-```bash
-oc create secret generic bank-db-secret \
-  --from-literal=DB_HOST=db \
-  --from-literal=DB_PORT=5432 \
-  --from-literal=DB_NAME=smartaibank \
-  --from-literal=DB_USER=bankuser \
-  --from-literal=DB_PASSWORD=bankpass
-```
+### Instantiate Template
 
-Deploy PostgreSQL using Software Catalog.
+<img width="2272" height="1248" alt="Screenshot 2026-07-02 at 1 01 38 PM" src="https://github.com/user-attachments/assets/dd7fdec5-f817-48ef-afb7-7f05eead8c11" />
 
-in the Secret:
-
-```bash
-oc new-app --name db --image=postgres:16-alpine \
-  -e POSTGRES_DB=smartaibank \
-  -e POSTGRES_USER=bankuser \
-  -e POSTGRES_PASSWORD=bankpass
-```
-
-> In the web console you can do the same via **+Add → Container images**.
+<img width="2288" height="1244" alt="Screenshot 2026-07-02 at 1 03 31 PM" src="https://github.com/user-attachments/assets/3040c2aa-647e-436f-a17a-f3dfbd5b9e91" />
 
 ## Part 3 — Backend
 
 1. In the web console: **+Add → Import from Git**.
+
+<img width="906" height="334" alt="Screenshot 2026-07-02 at 1 05 09 PM" src="https://github.com/user-attachments/assets/d034e703-e69b-477d-b56e-27b5a5d77540" />
+
 2. Git repo URL: this repository. Under **Advanced Git options**, set
    **Context dir** to `/backend` (it has its own Dockerfile).
-3. Name the application `backend`, target port **4000**. A public route is not
+
+<img width="1150" height="1150" alt="Screenshot 2026-07-02 at 1 06 29 PM" src="https://github.com/user-attachments/assets/cfe2cbf2-bfea-48cb-ab9a-8bae5bb8b9f4" />
+
+4. Name the application `backend`, target port **4000**. A public route is not
    required for the backend.
-4. Inject the database configuration from the Secret into the Deployment:
 
-   ```bash
-   oc set env deployment/backend --from=secret/bank-db-secret
-   ```
+<img width="1240" height="624" alt="Screenshot 2026-07-02 at 1 07 29 PM" src="https://github.com/user-attachments/assets/9ec65e5a-d486-4f4e-9047-810fa5eb245b" />
 
-5. **Run the database migration manually** from the backend pod (this seeds all
+   
+6. Inject the database configuration into the Deployment:
+
+<img width="1742" height="776" alt="Screenshot 2026-07-02 at 1 13 40 PM" src="https://github.com/user-attachments/assets/1ba0e774-577c-481f-ba74-b2278ce2f48c" />
+
+
+7. **Run the database migratio** from the backend pod (this seeds all
    demo data):
+
+<img width="1838" height="1016" alt="Screenshot 2026-07-02 at 1 14 14 PM" src="https://github.com/user-attachments/assets/e5f2c089-9286-4a65-b8d4-f08657d7fea8" />
+
 
    ```bash
    oc rsh deployment/backend npm run migration
