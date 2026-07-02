@@ -1,0 +1,443 @@
+:root {
+  --navy: #0b2545;
+  --navy-2: #13315c;
+  --teal: #0e9594;
+  --teal-dark: #0a6c6b;
+  --gold: #e0a458;
+  --bg: #f2f5f9;
+  --card: #ffffff;
+  --text: #1d2b3a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --red: #c0392b;
+  --green: #1e8e5a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Avenir Next', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ---- Header ---- */
+
+.header {
+  background: linear-gradient(90deg, var(--navy), var(--navy-2));
+  color: #fff;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand .logo {
+  width: 34px;
+  height: 34px;
+}
+
+.brand .tagline {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #b8c7dc;
+  display: block;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: 0.9rem;
+}
+
+.role-badge {
+  background: var(--teal);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.role-badge.manager {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+/* ---- Layout ---- */
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: 1.2rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.3rem;
+  box-shadow: 0 1px 3px rgba(11, 37, 69, 0.06);
+}
+
+.card h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.9rem;
+}
+
+.balance-figure {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.balance-sub {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.detail-list {
+  list-style: none;
+  font-size: 0.92rem;
+}
+
+.detail-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.detail-list li:last-child {
+  border-bottom: none;
+}
+
+.detail-list .label {
+  color: var(--muted);
+}
+
+.detail-list .value {
+  font-weight: 600;
+  text-align: right;
+}
+
+.verified {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ---- Tables ---- */
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+th {
+  text-align: left;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 2px solid var(--border);
+}
+
+td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+
+td.num,
+th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.amount-credit {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.amount-debit {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ---- Buttons & forms ---- */
+
+.btn {
+  display: inline-block;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: var(--teal-dark);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-weight: 400;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 0.9rem;
+}
+
+input:focus {
+  outline: 2px solid var(--teal);
+  border-color: transparent;
+}
+
+label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+/* ---- Login page ---- */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 55%, var(--teal-dark) 100%);
+  padding: 1.5rem;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.login-card .brand-block {
+  text-align: center;
+  margin-bottom: 1.6rem;
+}
+
+.login-card .brand-block .logo {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 0.6rem;
+}
+
+.login-card h1 {
+  font-size: 1.4rem;
+  color: var(--navy);
+}
+
+.login-card .subtitle {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.error-box {
+  background: #fdecea;
+  color: var(--red);
+  border: 1px solid #f5c6c0;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+
+.demo-creds {
+  margin-top: 1.4rem;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.demo-creds code {
+  background: #e5ebf2;
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  color: var(--navy);
+}
+
+/* ---- Chatbox ---- */
+
+.chat-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-window {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  padding: 0.9rem;
+  height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--teal);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.bot {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble.typing {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.chat-empty {
+  margin: auto;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.chat-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  background: #fff;
+  border: 1px solid var(--teal);
+  color: var(--teal-dark);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--teal);
+  color: #fff;
+}
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Misc ---- */
+
+.loading {
+  text-align: center;
+  color: var(--muted);
+  padding: 3rem;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  color: var(--navy);
+  margin: 0.4rem 0 1rem;
+}
+
+.stat-cards {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-bottom: 1.4rem;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.footer-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 1.5rem 0 2rem;
+}
