@@ -27,7 +27,7 @@ Monorepo, two microservices + Postgres:
 1. Login/logout with two roles:
    - Customer → `guest` role
    - Bank manager → `manager` role
-2. Customer views: bank statement, KYC details, account balance, account details. All data is fake and seeded by the database migration.
+2. Customer views: bank statement, KYC details, account balance, account details, add OTP for login. All data is fake and seeded by the database migration. For OTP use same pin code, fake it.
 3. "Chatbox" AI feature: user picks a canned question (e.g., "Summarize my monthly transactions") and gets a pre-generated reply. **No real AI model call** — it only needs to feel real (typing delay, chat UI).
 
 ## Development Rules

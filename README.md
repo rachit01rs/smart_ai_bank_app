@@ -9,7 +9,7 @@ A demo banking application for **OpenShift training** at KSKL (Karja Suchana Ken
 
 - **Login/logout** with two roles:
   - Customer (`guest` role) — sees their **balance, account details, KYC details,
-    and bank statement**.
+    and bank statement**, and can **enable an OTP step for login**.
   - Bank manager (`manager` role) — sees a **branch overview and all customer accounts**.
 - **Smart AI chatbox** — the customer picks a canned question (e.g. *"Summarize my
   monthly transactions"*) and gets a pre-generated reply after a realistic typing
@@ -23,6 +23,10 @@ A demo banking application for **OpenShift training** at KSKL (Karja Suchana Ken
 | `sita`    | `customer123` | customer  |
 | `hari`    | `customer123` | customer  |
 | `manager` | `manager123`  | manager   |
+
+When a customer enables **Login OTP** on their dashboard, signing in asks for
+an OTP code after the password. The code is always `123456` — it is faked (the
+same pin for every user, nothing is actually sent).
 
 ## Architecture
 
@@ -144,6 +148,8 @@ oc new-app --name db --image=postgres:16-alpine \
 - [ ] `oc rsh deployment/backend npm run migration` completed successfully.
 - [ ] Customer login works and shows balance, KYC, account details, and statement.
 - [ ] The chatbox answers a canned question.
+- [ ] Enabling **Login OTP** on the dashboard makes the next login ask for the
+      OTP code (`123456`).
 - [ ] Manager login shows the branch overview.
 
 ## Part 5 — Access control (RBAC)

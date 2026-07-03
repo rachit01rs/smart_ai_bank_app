@@ -20,7 +20,10 @@ const SCHEMA = `
     -- with fake data. Never do this in a real application.
     password   TEXT NOT NULL,
     full_name  TEXT NOT NULL,
-    role       TEXT NOT NULL CHECK (role IN ('guest', 'manager'))
+    role       TEXT NOT NULL CHECK (role IN ('guest', 'manager')),
+    -- When true, login asks for an OTP code as a second step. The "OTP" is
+    -- the same fake pin for everyone (see DEMO_OTP_PIN in server.js).
+    otp_enabled BOOLEAN NOT NULL DEFAULT FALSE
   );
 
   CREATE TABLE accounts (

@@ -20,6 +20,10 @@ const wrap = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 // Every request looks the user up again in the database. This is NOT real
 // security — it is the simplest thing that lets the frontend demo roles.
 
+// Fake OTP: every user shares this pin and nothing is ever sent by SMS/email.
+// It only exists so the login flow can demo a second step.
+const DEMO_OTP_PIN = '123456';
+
 function makeToken(user) {
   return Buffer.from(`${user.id}:${user.username}`).toString('base64');
 }
@@ -68,15 +72,25 @@ app.get('/health', async (req, res) => {
 });
 
 app.post('/api/login', wrap(async (req, res) => {
-  const { username, password } = req.body || {};
+  const { username, password, otp } = req.body || {};
   const { rows } = await pool.query(
-    'SELECT id, username, full_name, role FROM users WHERE username = $1 AND password = $2',
+    'SELECT id, username, full_name, role, otp_enabled FROM users WHERE username = $1 AND password = $2',
     [username || '', password || '']
   );
   if (!rows.length) {
     return res.status(401).json({ error: 'Invalid username or password' });
   }
-  const user = rows[0];
+  const { otp_enabled, ...user } = rows[0];
+
+  // Second step when the user has OTP turned on: first ask for the code,
+  // then check it against the shared demo pin.
+  if (otp_enabled) {
+    if (otp === undefined) return res.json({ otpRequired: true });
+    if (otp !== DEMO_OTP_PIN) {
+      return res.status(401).json({ error: 'Invalid OTP code' });
+    }
+  }
+
   res.json({ token: makeToken(user), user });
 }));
 
@@ -118,6 +132,28 @@ app.get('/api/kyc', auth, wrap(async (req, res) => {
   );
   if (!rows.length) return res.status(404).json({ error: 'No KYC record found' });
   res.json(rows[0]);
+}));
+
+// ---- OTP for login ----
+// The customer can turn OTP on/off from the dashboard. While enabled, login
+// asks for the shared demo pin, which is returned here so the UI can show it.
+
+app.get('/api/otp', auth, wrap(async (req, res) => {
+  const { rows } = await pool.query(
+    'SELECT otp_enabled FROM users WHERE id = $1',
+    [req.user.id]
+  );
+  const enabled = rows[0].otp_enabled;
+  res.json({ enabled, ...(enabled && { pin: DEMO_OTP_PIN }) });
+}));
+
+app.post('/api/otp', auth, wrap(async (req, res) => {
+  const enabled = Boolean((req.body || {}).enabled);
+  await pool.query('UPDATE users SET otp_enabled = $1 WHERE id = $2', [
+    enabled,
+    req.user.id,
+  ]);
+  res.json({ enabled, ...(enabled && { pin: DEMO_OTP_PIN }) });
 }));
 
 // ---- Chatbox "AI" (canned questions, pre-generated replies) ----

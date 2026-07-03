@@ -13,6 +13,8 @@ export default function DashboardPage() {
   const [account, setAccount] = useState(null);
   const [kyc, setKyc] = useState(null);
   const [statement, setStatement] = useState(null);
+  const [otp, setOtp] = useState(null);
+  const [otpBusy, setOtpBusy] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -21,14 +23,31 @@ export default function DashboardPage() {
     if (session.user.role === 'manager') return router.replace('/manager');
     setUser(session.user);
 
-    Promise.all([api('account'), api('kyc'), api('statement')])
-      .then(([acc, kycData, stmt]) => {
+    Promise.all([api('account'), api('kyc'), api('statement'), api('otp')])
+      .then(([acc, kycData, stmt, otpData]) => {
         setAccount(acc);
         setKyc(kycData);
         setStatement(stmt);
+        setOtp(otpData);
       })
       .catch((err) => setError(err.message));
   }, [router]);
+
+  async function toggleOtp() {
+    setOtpBusy(true);
+    setError('');
+    try {
+      setOtp(
+        await api('otp', {
+          method: 'POST',
+          body: JSON.stringify({ enabled: !otp.enabled }),
+        })
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+    setOtpBusy(false);
+  }
 
   if (!user) return <div className="loading">Loading…</div>;
 
@@ -112,6 +131,42 @@ export default function DashboardPage() {
                   </span>
                 </li>
               </ul>
+            )}
+          </div>
+
+          <div className="card">
+            <h2>Login OTP</h2>
+            {otp && (
+              <>
+                <ul className="detail-list">
+                  <li>
+                    <span className="label">Status</span>
+                    <span className={`value ${otp.enabled ? 'verified' : ''}`}>
+                      {otp.enabled ? '✔ Enabled' : 'Disabled'}
+                    </span>
+                  </li>
+                  {otp.enabled && (
+                    <li>
+                      <span className="label">Your OTP code</span>
+                      <span className="value">
+                        <code>{otp.pin}</code>
+                      </span>
+                    </li>
+                  )}
+                </ul>
+                <p className="card-note">
+                  {otp.enabled
+                    ? 'Signing in now asks for this OTP code after your password.'
+                    : 'Add a one-time PIN as a second step when you sign in.'}
+                </p>
+                <button className="btn" onClick={toggleOtp} disabled={otpBusy}>
+                  {otpBusy
+                    ? 'Saving…'
+                    : otp.enabled
+                      ? 'Disable OTP'
+                      : 'Enable OTP'}
+                </button>
+              </>
             )}
           </div>
         </div>
